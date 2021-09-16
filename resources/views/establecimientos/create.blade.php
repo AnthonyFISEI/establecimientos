@@ -4,6 +4,13 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
   crossorigin=""/>
+    <!-- Esri Leaflet Geocoder -->
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css"
+/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.min.css" integrity="sha512-0ns35ZLjozd6e3fJtuze7XJCQXMWmb4kPRbb+H/hacbqu6XfIX0ZRGt6SrmNmv5btrBpbzfdISSd8BAsXJ4t1Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endsection
 @section('content')
 
@@ -68,7 +75,7 @@
                 </fieldset>
 
 
-                <fieldset class="border p-4">
+                <fieldset class="border p-4 mt-5">
                     <legend class="text-primary">Ubicación</legend>
 
                     <div class="form-group">
@@ -78,7 +85,7 @@
                         class="form-control">
 
                         <p class="text-secondary mt-5 mb-3 text-center">
-                            El asistente colocará una dirección estiamda, mueve el Pin hacia un lugar correcto
+                            El asistente colocará una dirección estiamda o mueve el Pin hacia un lugar correcto
                         </p>
                     </div>
 
@@ -128,6 +135,86 @@
 
 
                 </fieldset>
+
+                <fieldset class="border p-4 mt-5">
+                    <legend  class="text-primary">Información Establecimiento: </legend>
+                        <div class="form-group">
+                            <label for="nombre">Teléfono</label>
+                            <input
+                                type="tel"
+                                class="form-control @error('telefono')  is-invalid  @enderror"
+                                id="telefono"
+                                placeholder="Teléfono Establecimiento"
+                                name="telefono"
+                                value="{{ old('telefono') }}"
+                            >
+
+                                @error('telefono')
+                                    <div class="invalid-feedback">
+                                        {{$message}}
+                                    </div>
+                                @enderror
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="nombre">Descripción</label>
+                            <textarea
+                                class="form-control  @error('descripcion')  is-invalid  @enderror"
+                                name="descripcion"
+                            >{{ old('descripcion') }}</textarea>
+
+                                @error('descripcion')
+                                    <div class="invalid-feedback">
+                                        {{$message}}
+                                    </div>
+                                @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nombre">Hora Apertura:</label>
+                            <input
+                                type="time"
+                                class="form-control @error('apertura')  is-invalid  @enderror"
+                                id="apertura"
+                                name="apertura"
+                                value="{{ old('apertura') }}"
+                            >
+                            @error('apertura')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nombre">Hora Cierre:</label>
+                            <input
+                                type="time"
+                                class="form-control @error('cierre')  is-invalid  @enderror"
+                                id="cierre"
+                                name="cierre"
+                                value="{{ old('cierre') }}"
+                            >
+                            @error('cierre')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                            @enderror
+                        </div>
+                </fieldset>
+
+                <fieldset class="border p-4 mt-5">
+                    <legend  class="text-primary">Información Establecimiento: </legend>
+                        <div class="form-group">
+                            <label for="imagenes">Imagenes</label>
+
+                            <div class="dropzone form-control" id="dropzone"></div>
+                        </div>
+                </fieldset>
+                <input type="hidden" id="uuid" name="uuid" value="{{Str::uuid()->toString()}}">
+                <input type="submit" class="btn btn-primary mt-3 d-block" value="Registrar Establecimiento">
             </form>
         </div>
 
@@ -137,12 +224,15 @@
 @endsection
 
 @section('scripts')
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-  crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin="" defer></script>
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet" defer></script>
 
-  <script>
 
+    <!-- Esri Leaflet Geocoder -->
+    <script src="https://unpkg.com/esri-leaflet-geocoder" defer></script>
 
-  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.min.js" integrity="sha512-Mn7ASMLjh+iTYruSWoq2nhoLJ/xcaCbCzFs0ZrltJn7ksDBx+e7r5TS7Ce5WH02jDr0w5CmGgklFoP9pejfCNA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 @endsection
