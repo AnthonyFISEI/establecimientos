@@ -64100,7 +64100,10 @@ __webpack_require__.r(__webpack_exports__);
   !*** ./resources/js/dropzone.js ***!
   \**********************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
+    Axios = _require["default"];
 
 document.addEventListener('DOMContentLoaded', function () {
   if (document.querySelector('#dropzone')) {
@@ -64111,8 +64114,29 @@ document.addEventListener('DOMContentLoaded', function () {
       maxFiles: 10,
       required: true,
       acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg",
+      addRemoveLinks: true,
+      dictRemoveFile: "Eliminar Imagen",
       headers: {
         'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+      },
+      success: function success(file, respuesta) {
+        console.log(file); // console.log(respuesta);
+
+        file.nombreServidor = respuesta.archivo;
+      },
+      sending: function sending(file, xhr, formData) {
+        formData.append('uuid', document.querySelector('#uuid').value); // console.log('enviando');
+      },
+      removedfile: function removedfile(file, respuesta) {
+        console.log(file);
+        var params = {
+          imagen: file.nombreServidor
+        };
+        axios.post('/imagenes/destroy', params).then(function (respuesta) {
+          console.log(respuesta); // Eliminar del dom
+
+          file.previewElement.parentNode.removeChild(file.previewElement);
+        });
       }
     });
   }

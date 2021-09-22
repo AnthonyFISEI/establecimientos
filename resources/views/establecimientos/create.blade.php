@@ -18,9 +18,10 @@
         <h1 class="text-center mt-4">Registrar Establecimiento</h1>
 
         <div class="mt-5 row justify-content-center">
-            <form action=""
-            class="col-md-9 col-xs-12 card card-body">
-
+            <form action="{{route('establecimiento.store')}}"
+            class="col-md-9 col-xs-12 card card-body"
+            method="POST" enctype="multipart/form-data">
+            @csrf
                 <fieldset class="border p-4">
                     <legend class="text-primary">Nombre, Categoría e Imagen Principal</legend>
 
@@ -46,7 +47,7 @@
                             class="form-control @error('categoria_id') is-invalid
                             @enderror"
                             name="categoria_id"
-                            id="categoria">
+                            id="categoria_id">
                             <option value="" selected disabled>-- Seleccione --</option>
 
                             @foreach ($categorias as $categoria)
@@ -57,6 +58,12 @@
 
                             @endforeach
                         </select>
+
+                        @error('categoria_id')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
                     </div>
 
                     <div class="form-group">
@@ -100,6 +107,7 @@
 
                         <input type="text"
                                 id="direccion"
+                                name="direccion"
                                 class="form-control @error('direccion') is-invalid
                                 @enderror"
                                 placeholder="Dirección"
@@ -121,7 +129,8 @@
                                 class="form-control @error('colonia') is-invalid
                                 @enderror"
                                 placeholder="Colonia"
-                                value="{{old('colonia')}}">
+                                value="{{old('colonia')}}"
+                                name="colonia">
 
                         @error('colonia')
                                 <div class="invalid-feedback">
