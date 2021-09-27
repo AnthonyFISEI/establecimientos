@@ -16,7 +16,9 @@
                                 {{hotel.apertura}} - {{hotel.cierre}}
                         </p>
 
-                        <a href="" class="btn btn-primary d-block">Ver Lugar</a>
+                        <router-link :to="{name:'establecimiento',params: {id:hotel.id}}">
+                             <a href="" class="btn btn-primary d-block">Ver Lugar</a>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -28,17 +30,18 @@
 <script>
 export default {
 
-    data:function(){
-        return{
-            hoteles: []
-        }
-    },
     mounted(){
         axios.get('/api/categorias/hotel')
             .then(respuesta=>{
                 // console.log(respuesta.data)
-                this.hoteles = respuesta.data;
+                // this.hoteles = respuesta.data;
+                this.$store.commit('AGREGAR_HOTELES', respuesta.data);
             })
+    },
+    computed:{
+        hoteles(){
+            return this.$store.state.hoteles;
+        }
     }
 }
 </script>
