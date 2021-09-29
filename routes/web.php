@@ -21,9 +21,10 @@ Auth::routes(['verify' => true]);
 
 // Grupo de rutas protegidas
 Route::group(['middleware' => ['auth', 'verified']],function(){
-    Route::get('/establecimiento/create','EstablecimientoController@create')->name('establecimiento.create');
+    Route::get('/establecimiento/create','EstablecimientoController@create')->name('establecimiento.create')->middleware('revisar');;
     Route::post('/establecimiento/store','EstablecimientoController@store')->name('establecimiento.store');
     Route::get('/establecimiento/edit','EstablecimientoController@edit')->name('establecimiento.edit');
+    Route::put('/establecimiento/{establecimiento}','EstablecimientoController@update')->name('establecimiento.update');
 
     // gUARDAR IMAGENES
 

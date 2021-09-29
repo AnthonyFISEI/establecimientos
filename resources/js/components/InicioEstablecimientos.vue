@@ -1,6 +1,8 @@
 <template>
 
 <div>
+    <listado-categorias> </listado-categorias>
+    <mapa-establecimientos></mapa-establecimientos>
     <categoria-cafe></categoria-cafe>
     <categoria-restaurant></categoria-restaurant>
     <categoria-hotel></categoria-hotel>
@@ -10,6 +12,8 @@
 
 
 <script>
+import ListadoCategorias from './ListadoCategorias';
+import MapaEstablecimientos from './MapaEstablecimientos'
 import CategoriaCafe from './CategoriaCafe'
 import CategoriaRestaurant from './CategoriaRestaurant'
 import CategoriaHotel from './CategoriaHotel'
@@ -20,7 +24,9 @@ export default {
     components:{
         CategoriaCafe,
         CategoriaRestaurant,
-        CategoriaHotel
+        CategoriaHotel,
+        MapaEstablecimientos,
+        ListadoCategorias
     }
 }
 </script>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imagen;
 use App\Categoria;
 use App\Establecimiento;
 use Illuminate\Http\Request;
@@ -109,8 +110,17 @@ class EstablecimientoController extends Controller
     public function edit(Establecimiento $establecimiento)
     {
         //
+        $categorias=Categoria::all();
+        // Obtener el establecimiento
 
-        return 'Desde edit';
+        $establecimiento = auth()->user()->establecimiento;
+        $establecimiento->apertura = date('H:i',strtotime($establecimiento->apertura));
+        $establecimiento->cierre = date('H:i',strtotime($establecimiento->cierre));
+
+        //Obtienes las imagenes del establecimiento
+
+        $imagenes = Imagen::where('id_establecimiento',$establecimiento->uuid)->get();
+        return view('establecimientos.edit',compact('categorias','establecimiento','imagenes'));
     }
 
     /**
@@ -122,7 +132,58 @@ class EstablecimientoController extends Controller
      */
     public function update(Request $request, Establecimiento $establecimiento)
     {
-        //
+
+        // Ejecutar el policy
+        $this->authorize('update',$establecimiento);
+                //Validacion
+        $data = $request->validate([
+        'nombre' => 'required',
+        // Valida que la categoria existe en la base
+        'categoria_id' => 'required|exists:App\Categoria,id',
+        'imagen_principal' => 'image|max:1000',
+        'direccion' => 'required',
+        'colonia' => 'required',
+        'lat' => 'required',
+        'lng' => 'required',
+        'telefono' => 'required|numeric',
+        'descripcion' => 'required|min:50',
+        'apertura' => 'date_format:H:i',
+        'cierre' => 'date_format:H:i|after:apertura',
+        'uuid' => 'required|uuid'
+
+        ]);
+
+        $establecimiento->nombre = $data['nombre'];
+        $establecimiento->categoria_id = $data['categoria_id'];
+        $establecimiento->direccion = $data['direccion'];
+        $establecimiento->colonia = $data['colonia'];
+        $establecimiento->lat = $data['lat'];
+        $establecimiento->lng = $data['lng'];
+        $establecimiento->telefono = $data['telefono'];
+        $establecimiento->descripcion = $data['descripcion'];
+        $establecimiento->apertura = $data['apertura'];
+        $establecimiento->cierre = $data['cierre'];
+        $establecimiento->uuid = $data['uuid'];
+
+        // Si el usuario sube una imagen
+
+        if(request('imagen_principal')){
+        //guardar la imagen
+
+        $ruta_imagen = $request['imagen_principal']->store('principales', 'public');
+
+        //resize a la imagen
+
+        $img = Image::make(public_path("storage/{$ruta_imagen}"))->fit(800,600);
+
+        $img->save();
+        $establecimiento->imagen_principal=$ruta_imagen;
+        }
+
+        $establecimiento->save();
+        // dd('desde update');
+
+        return back()->with('estado','Tu información se almacenó correctamente');
     }
 
     /**

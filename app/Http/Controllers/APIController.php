@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 
 class APIController extends Controller
 {
+
+    // Mostrar todos los establecimientos
+    public function index(){
+        $establecimientos= Establecimiento::with('categoria')->get();
+        return response()->json($establecimientos);
+    }
+
+
     //Metodo para obtener todas las categorias
 
 
@@ -28,6 +36,12 @@ class APIController extends Controller
         return response()->json($establecimientos);
     }
 
+    public function establecimientoscategoria(Categoria $categoria){
+        $establecimientos = Establecimiento::where('categoria_id',$categoria->id)->with('categoria')
+        ->get();
+
+        return response()->json($establecimientos);
+    }
     // Muestra un establecimiento en especifico
     public function show(Establecimiento $establecimiento){
 
